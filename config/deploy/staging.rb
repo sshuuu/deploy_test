@@ -3,11 +3,14 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-# server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
+server "ec2-54-64-64-43.ap-northeast-1.compute.amazonaws.com", user: "ssato", roles: %w{app}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
+set :stage, :production
+set :rails_env, 'staging'
 
+set :branch, ENV['BRANCH_NAME'] || 'master'
 
 # role-based syntax
 # ==================
