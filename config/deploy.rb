@@ -56,6 +56,9 @@ set :puma_init_active_record, true  # Change to false when not using ActiveRecor
 # rbenvをユーザローカルにインストールする場合に必要
 append :rbenv_map_bins, 'puma', 'pumactl'
 
+# Defaults to [:web]
+set :assets_roles, [:web, :app]
+
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
