@@ -29,6 +29,7 @@ set :deploy_to, "/var/www/rails/#{fetch(:application)}"
 
 # Default value for :linked_files is []
 # append :linked_files, "config/database.yml"
+append :linked_files, "config/master.key"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
@@ -42,7 +43,7 @@ set :rbenv_roles, :all # default value
 
 # pumaの設定
 set :puma_threads,  [4, 16]
-set :puma_workers, 0
+set :puma_workers, 2
 
 set :puma_bind,       "unix://#{shared_path}/tmp/sockets/puma.sock"
 set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
@@ -116,6 +117,17 @@ namespace :deploy do
       end
     end
   end
+
+  desc 'copy master.key'
+  task :cp_master_key do
+    src = File.expand_path(File.join(File.dirname(__FILE__), "master.key"))
+    on roles(:app) do |host|
+      dst = "#{shared_path}/config/master.key"
+      execute "chmod 600 #{dst}"
+      upload!(src, dst)
+    end
+  end
+  before :starting, :cp_master_key
 
   # after  :migrate,      :seed
   # before :starting,     :seed_revision
