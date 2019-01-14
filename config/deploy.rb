@@ -31,7 +31,7 @@ set :deploy_to, "/var/www/rails/#{fetch(:application)}"
 # append :linked_files, "config/database.yml"
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
 
 # rbenvをシステムにインストールしたか? or ユーザーローカルにインストールしたか?
 set :rbenv_type, :user # :system or :user
@@ -84,7 +84,7 @@ end
 
 namespace :deploy do
   desc 'Make sure local git is in sync with remote.'
-  task :check_revision do
+  task :seed_revision do
     on roles(:app) do
       unless `git rev-parse HEAD` == `git rev-parse origin/master`
       end
@@ -117,8 +117,8 @@ namespace :deploy do
     end
   end
 
-  after  :migrate,      :seed
-  before :starting,     :check_revision
-  after  :finishing,    :compile_assets
-  after  :finishing,    :cleanup
+  # after  :migrate,      :seed
+  # before :starting,     :seed_revision
+  # after  :finishing,    :compile_assets
+  # after  :finishing,    :cleanup
 end
